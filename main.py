@@ -52,4 +52,6 @@ def update_balance():
     return jsonify({'points': games['points']})
 
 if __name__ == '__main__':
-    app.run(host='localhost', port=3000, debug=True)
+    # Production ready - use PORT environment variable
+    port = int(os.environ.get('PORT', 3000))
+    app.run(host='0.0.0.0', port=port, debug=False)
