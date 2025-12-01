@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>PointCS - Casino</title>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo-section">
+                <h1 class="logo">PointCS</h1>
+                <span class="logo-subtitle">Casino</span>
+            </div>
+            <div class="balance-profile">
+                <div class="points-balance">
+                    <span class="points-label">Баланс</span>
+                    <span class="points-value">1000</span>
+                </div>
+                <button class="profile-button">Профіль</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="games-section">
+            <h2>Наші ігри</h2>
+            <div class="games-grid">
+                <div class="game-card">
+                    <div class="game-icon">🎰</div>
+                    <h3>Вгадай число</h3>
+                    <p>Вгадай випадкове число та виграй</p>
+                    <button class="btn btn-small" onclick="openGameModal('guessNumber')">Грати</button>
+                </div>
+                <div class="game-card">
+                    <div class="game-icon">🥤</div>
+                    <h3>Три стакани</h3>
+                    <p>Вибери правильний стакан</p>
+                    <button class="btn btn-small" onclick="openGameModal('cups')">Грати</button>
+                </div>
+                <div class="game-card">
+                    <div class="game-icon">⚫</div>
+                    <h3>Plinko</h3>
+                    <p>Квадрова гра зі стратегією</p>
+                    <button class="btn btn-small" onclick="openGameModal('plinko')">Грати</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Модальні вікна для ігор -->
+    <div id="gameModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeGameModal()">&times;</span>
+            
+            <!-- Вгадай число -->
+            <div id="guessNumberGame" class="game-view">
+                <h2>Вгадай число</h2>
+                <div class="game-container">
+                    <div class="bet-input">
+                        <label>Ставка:</label>
+                        <input type="number" id="guessBet" min="10" max="1000" value="100">
+                        <span class="max-bet">Макс: <span id="maxBet">1000</span></span>
+                    </div>
+                    <div class="number-input">
+                        <label>Вибери число (1-10):</label>
+                        <div class="number-grid">
+                            <button class="number-btn" onclick="selectNumber(1)">1</button>
+                            <button class="number-btn" onclick="selectNumber(2)">2</button>
+                            <button class="number-btn" onclick="selectNumber(3)">3</button>
+                            <button class="number-btn" onclick="selectNumber(4)">4</button>
+                            <button class="number-btn" onclick="selectNumber(5)">5</button>
+                            <button class="number-btn" onclick="selectNumber(6)">6</button>
+                            <button class="number-btn" onclick="selectNumber(7)">7</button>
+                            <button class="number-btn" onclick="selectNumber(8)">8</button>
+                            <button class="number-btn" onclick="selectNumber(9)">9</button>
+                            <button class="number-btn" onclick="selectNumber(10)">10</button>
+                        </div>
+                        <p class="selected-number">Вибране число: <span id="selectedNum">-</span></p>
+                    </div>
+                    <button class="btn btn-primary" onclick="playGuessNumber()">Грати</button>
+                    <div id="guessResult" class="result-message"></div>
+                </div>
+            </div>
+
+            <!-- Три стакани -->
+            <div id="cupsGame" class="game-view" style="display: none;">
+                <h2>Три стакани</h2>
+                <div class="game-container">
+                    <div class="bet-input">
+                        <label>Ставка:</label>
+                        <input type="number" id="cupsBet" min="10" max="1000" value="100">
+                        <span class="max-bet">Макс: <span id="maxBet2">1000</span></span>
+                    </div>
+                    <p>Виберіть складність:</p>
+                    <div class="difficulty-buttons">
+                        <button class="difficulty-btn" onclick="selectDifficulty('easy')">Легко</button>
+                        <button class="difficulty-btn" onclick="selectDifficulty('medium')">Середній</button>
+                        <button class="difficulty-btn" onclick="selectDifficulty('hard')">Складно</button>
+                    </div>
+                    <p class="selected-difficulty">Складність: <span id="selectedDiff">-</span></p>
+                    
+                    <!-- Анімація перемішування -->
+                    <p id="shufflingText" style="color: var(--lavender-grey); font-size: 14px; margin: 10px 0; display: none;">Шарик переміщується...</p>
+                    <div class="cups-animation" style="display: none;">
+                        <div class="cup-item">🥤</div>
+                        <div class="cup-item">🥤</div>
+                        <div class="cup-item">🥤</div>
+                    </div>
+                    
+                    <!-- Вибір стаканів - показується тільки після анімації -->
+                    <div id="cupsSelectionSection" style="display: none;">
+                        <p>Виберіть стакан (1-3):</p>
+                        <div class="cups-container">
+                            <div class="cup" onclick="selectCup(1)">🥤</div>
+                            <div class="cup" onclick="selectCup(2)">🥤</div>
+                            <div class="cup" onclick="selectCup(3)">🥤</div>
+                        </div>
+                        <p class="selected-cup">Вибраний стакан: <span id="selectedCup">-</span></p>
+                        <button class="btn btn-primary" onclick="playCups()">Грати</button>
+                    </div>
+                    
+                    <div id="cupsResult" class="result-message"></div>
+                </div>
+            </div>
+
+            <!-- Plinko -->
+            <div id="plinkoGame" class="game-view" style="display: none;">
+                <h2>Plinko</h2>
+                <div class="game-container">
+                    <div class="bet-input">
+                        <label>Ставка:</label>
+                        <input type="number" id="plinkoBet" min="10" max="1000" value="100">
+                        <span class="max-bet">Макс: <span id="maxBet3">1000</span></span>
+                    </div>
+                    
+                    <div class="plinko-settings">
+                        <div class="setting-group">
+                            <label>Рядків (Rows): <span id="rowsValue">8</span></label>
+                            <input type="range" id="rowsSlider" min="5" max="15" value="8" oninput="updateRows(this.value)">
+                            <small>Більше рядків = більше непередбачуваності</small>
+                        </div>
+                        
+                        <div class="setting-group">
+                            <label>Ризик (Risk):</label>
+                            <div class="risk-buttons">
+                                <button class="risk-btn" onclick="selectRisk('low')">Низький</button>
+                                <button class="risk-btn" onclick="selectRisk('medium')">Середній</button>
+                                <button class="risk-btn" onclick="selectRisk('high')">Високий</button>
+                            </div>
+                            <p class="selected-risk">Вибраний ризик: <span id="selectedRisk">-</span></p>
+                        </div>
+                    </div>
+
+                    <div class="plinko-board" id="plinkoBoard"></div>
+                    
+                    <button class="btn btn-primary" onclick="playPlinko()">Скинути шарик</button>
+                    <div id="plinkoResult" class="result-message"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 PointCS Casino. Всі права захищені.</p>
+    </footer>
+
+    <script src="script.js"></script>
